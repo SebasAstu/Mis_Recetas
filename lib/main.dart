@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mis_recetas/porfile.dart';
 
 
 void main() {
@@ -121,6 +122,49 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Inicio',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: 'Mis recentas',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Perfil',
+          ),
+        ],
+        backgroundColor: Colors.purple[200],
+        unselectedItemColor: Colors.white,
+        selectedItemColor: Colors.white,
+        onTap: (int index) {
+          switch (index) {
+            case 0:
+              print('Presionado Inicio');
+              break;
+            case 1:
+              print('Presionado Buscar');
+              break;
+            case 2:
+              print('Presionado Perfil');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage(
+                  username: 'usuario1',
+                  name: 'Juan',
+                  age: 25,
+                  address: 'Calle Principal, 123',
+                  email: 'email',
+                  bio: 'bio',
+                ),),
+              );
+              break;
+          }
+        },
       ),
     );
   }
