@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mis_recetas/main.dart';
+import 'package:mis_recetas/main.dart';
 
 void main() {
   runApp(MyApp());
@@ -109,6 +111,11 @@ class LoginPage extends StatelessWidget {
                 if (isAuthenticated) {
                   // Acción al iniciar sesión exitosamente
                   showSnackBar(context, "Inicio de sesión exitoso");
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(),
+                      ));
                 } else {
                   // Acción en caso de falla de inicio de sesión
                   showSnackBar(context, "Inicio de sesión fallido");
