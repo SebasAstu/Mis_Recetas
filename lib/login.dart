@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mis_recetas/main.dart';
 import 'package:mis_recetas/main.dart';
+import 'package:mis_recetas/sign_up_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -174,7 +175,11 @@ class LoginPage extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      // Acción al tocar el texto
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SignUpPage(),
+                          ));
                     },
                     child: Text(
                       ' Regístrate',

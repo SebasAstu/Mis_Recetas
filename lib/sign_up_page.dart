@@ -43,11 +43,13 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            _buildTextFields(),
-            _buildButtons(),
-          ],
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              _buildTextFields(),
+              _buildButtons(),
+            ],
+          ),
         ),
       ),
     );
@@ -57,15 +59,58 @@ class _SignUpPageState extends State<SignUpPage> {
     return Container(
       child: Column(
         children: <Widget>[
-          TextField(
-            controller: _emailFilter,
-            decoration: const InputDecoration(labelText: 'Email'),
+          const SizedBox(height: 20.0),
+          // Campo de correo
+          Container(
+            width: 250.0,
+            height: 46.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
+              border: Border.all(
+                color: const Color.fromARGB(255, 224, 224, 224),
+                width: 2.0,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: TextField(
+                controller: _emailFilter,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.mail, color: Color(0xFFFFA53D)),
+                  hintText: 'Correo Electrónico',
+                  border: InputBorder.none,
+                ),
+                style: const TextStyle(color: Color(0xFFFFA53D)),
+              ),
+            ),
           ),
-          TextField(
-            controller: _passwordFilter,
-            decoration: const InputDecoration(labelText: 'Password'),
-            obscureText: true,
-          )
+          const SizedBox(height: 20.0),
+          // Campo de contraseña
+          Container(
+            width: 250.0,
+            height: 46.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
+              border: Border.all(
+                color: const Color.fromARGB(255, 224, 224, 224),
+                width: 2.0,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: TextField(
+                controller: _passwordFilter,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.lock, color: Color(0xFFFFA53D)),
+                  hintText: 'Contraseña',
+                  border: InputBorder.none,
+                ),
+                style: const TextStyle(color: Color(0xFFFFA53D)),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20.0),
         ],
       ),
     );
@@ -76,12 +121,29 @@ class _SignUpPageState extends State<SignUpPage> {
       children: <Widget>[
         ElevatedButton(
           onPressed: _signUpPressed,
-          child: const Text('Sign Up'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color(0xFFFFA53D),
+            side: const BorderSide(
+              color: Color.fromARGB(255, 90, 89, 88),
+              width: 2,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+          ),
+          child: const SizedBox(
+            width: 131.0,
+            height: 46.0,
+            child: Center(
+              child: Text(
+                'Iniciar Sesión',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
         ),
-        ElevatedButton(
-          onPressed: _loginPressed,
-          child: const Text('Have an account? Login.'),
-        )
       ],
     );
   }
