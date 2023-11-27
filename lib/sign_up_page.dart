@@ -11,6 +11,8 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _emailFilter = TextEditingController();
   final TextEditingController _passwordFilter = TextEditingController();
   final TextEditingController _nameFilter = TextEditingController();
+  final TextEditingController _repeatPasswordFilter = TextEditingController();
+  String _repeatPassword = "";
   String _email = "";
   String _password = "";
   String _name = "";
@@ -19,6 +21,7 @@ class _SignUpPageState extends State<SignUpPage> {
     _emailFilter.addListener(_emailListen);
     _passwordFilter.addListener(_passwordListen);
     _nameFilter.addListener(_nameListen);
+    _repeatPasswordFilter.addListener(_repeatPasswordListen);
   }
 
   void _emailListen() {
@@ -45,6 +48,14 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
+  void _repeatPasswordListen() {
+    if (_repeatPasswordFilter.text.isEmpty) {
+      _repeatPassword = "";
+    } else {
+      _repeatPassword = _repeatPasswordFilter.text;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,6 +74,10 @@ class _SignUpPageState extends State<SignUpPage> {
               _buildTextField(_emailFilter, Icons.mail, 'Correo Electrónico'),
               const SizedBox(height: 20.0),
               _buildTextField(_passwordFilter, Icons.lock, 'Contraseña',
+                  obscureText: true),
+              const SizedBox(height: 20.0),
+              _buildTextField(
+                  _repeatPasswordFilter, Icons.lock, 'Repetir Contraseña',
                   obscureText: true),
               const SizedBox(height: 20.0),
               _buildButtons(),
@@ -92,7 +107,7 @@ class _SignUpPageState extends State<SignUpPage> {
           controller: controller,
           obscureText: obscureText,
           decoration: InputDecoration(
-            icon: Icon(icon, color: Color(0xFFFFA53D)),
+            icon: Icon(icon, color: const Color(0xFFFFA53D)),
             hintText: hintText,
             border: InputBorder.none,
           ),
@@ -108,7 +123,7 @@ class _SignUpPageState extends State<SignUpPage> {
         ElevatedButton(
           onPressed: _signUpPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color(0xFFFFA53D),
+            backgroundColor: const Color(0xFFFFA53D),
             side: const BorderSide(
               color: Color.fromARGB(255, 90, 89, 88),
               width: 2,
@@ -135,7 +150,8 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _signUpPressed() {
-    print('The user wants to login with $_email and $_password and $_name');
+    print(
+        'The user wants to login with $_email and $_password and $_name and $_repeatPassword');
   }
 
   void _loginPressed() {
