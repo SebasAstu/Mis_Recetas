@@ -163,11 +163,28 @@ class LoginPage extends StatelessWidget {
               onTap: () {
                 // Acción al presionar el enlace de "¿No tienes cuenta? Regístrate"
               },
-              child: Text(
-                '¿No tienes cuenta? Regístrate',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    '¿No tienes cuenta?',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      // Acción al tocar el texto
+                    },
+                    child: Text(
+                      ' Regístrate',
+                      style: TextStyle(
+                        color: Colors.black,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
