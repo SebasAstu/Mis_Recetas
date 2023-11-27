@@ -153,8 +153,4 @@ class _SignUpPageState extends State<SignUpPage> {
     print(
         'The user wants to login with $_email and $_password and $_name and $_repeatPassword');
   }
-
-  void _loginPressed() {
-    Navigator.pop(context);
-  }
 }
