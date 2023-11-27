@@ -10,12 +10,15 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _emailFilter = TextEditingController();
   final TextEditingController _passwordFilter = TextEditingController();
+  final TextEditingController _nameFilter = TextEditingController();
   String _email = "";
   String _password = "";
+  String _name = "";
 
   _SignUpPageState() {
     _emailFilter.addListener(_emailListen);
     _passwordFilter.addListener(_passwordListen);
+    _nameFilter.addListener(_nameListen);
   }
 
   void _emailListen() {
@@ -34,6 +37,14 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
+  void _nameListen() {
+    if (_nameFilter.text.isEmpty) {
+      _name = "";
+    } else {
+      _name = _nameFilter.text;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +57,14 @@ class _SignUpPageState extends State<SignUpPage> {
         child: Center(
           child: Column(
             children: <Widget>[
-              _buildTextFields(),
+              _buildTextField(
+                  _nameFilter, Icons.mail, 'Ingresa tu nombre completo'),
+              const SizedBox(height: 20.0),
+              _buildTextField(_emailFilter, Icons.mail, 'Correo Electrónico'),
+              const SizedBox(height: 20.0),
+              _buildTextField(_passwordFilter, Icons.lock, 'Contraseña',
+                  obscureText: true),
+              const SizedBox(height: 20.0),
               _buildButtons(),
             ],
           ),
@@ -55,63 +73,31 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget _buildTextFields() {
+  Widget _buildTextField(
+      TextEditingController controller, IconData icon, String hintText,
+      {bool obscureText = false}) {
     return Container(
-      child: Column(
-        children: <Widget>[
-          const SizedBox(height: 20.0),
-          // Campo de correo
-          Container(
-            width: 250.0,
-            height: 46.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
-              border: Border.all(
-                color: const Color.fromARGB(255, 224, 224, 224),
-                width: 2.0,
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: TextField(
-                controller: _emailFilter,
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.mail, color: Color(0xFFFFA53D)),
-                  hintText: 'Correo Electrónico',
-                  border: InputBorder.none,
-                ),
-                style: const TextStyle(color: Color(0xFFFFA53D)),
-              ),
-            ),
+      width: 250.0,
+      height: 46.0,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0),
+        border: Border.all(
+          color: const Color.fromARGB(255, 224, 224, 224),
+          width: 2.0,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: TextField(
+          controller: controller,
+          obscureText: obscureText,
+          decoration: InputDecoration(
+            icon: Icon(icon, color: Color(0xFFFFA53D)),
+            hintText: hintText,
+            border: InputBorder.none,
           ),
-          const SizedBox(height: 20.0),
-          // Campo de contraseña
-          Container(
-            width: 250.0,
-            height: 46.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
-              border: Border.all(
-                color: const Color.fromARGB(255, 224, 224, 224),
-                width: 2.0,
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: TextField(
-                controller: _passwordFilter,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.lock, color: Color(0xFFFFA53D)),
-                  hintText: 'Contraseña',
-                  border: InputBorder.none,
-                ),
-                style: const TextStyle(color: Color(0xFFFFA53D)),
-              ),
-            ),
-          ),
-          const SizedBox(height: 20.0),
-        ],
+          style: const TextStyle(color: Color(0xFFFFA53D)),
+        ),
       ),
     );
   }
@@ -149,7 +135,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _signUpPressed() {
-    print('The user wants to login with $_email and $_password');
+    print('The user wants to login with $_email and $_password and $_name');
   }
 
   void _loginPressed() {
