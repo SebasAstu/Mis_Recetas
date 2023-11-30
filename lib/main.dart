@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mis_recetas/RecipeDetails.dart';
 import 'package:mis_recetas/login.dart';
 import 'dart:convert';
 import 'porfile.dart';
@@ -119,7 +120,11 @@ class _HomePageState extends State<HomePage> {
                             Text('Puntuación: ${recipes[index].score.toStringAsFixed(2)}'),
                             ElevatedButton(
                               onPressed: () {
-                                // Implementa la lógica para abrir más detalles de la receta.
+                                // Implementa la onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => RecipeDetailPage(recipe: recipes[index])),
+                                );                              
                               },
                               child: Text('Ver Más'),
                             ),
