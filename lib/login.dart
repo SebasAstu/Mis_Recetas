@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mis_recetas/main.dart';
 import 'package:mis_recetas/main.dart';
+import 'package:mis_recetas/sign_up_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -163,11 +164,32 @@ class LoginPage extends StatelessWidget {
               onTap: () {
                 // Acción al presionar el enlace de "¿No tienes cuenta? Regístrate"
               },
-              child: Text(
-                '¿No tienes cuenta? Regístrate',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    '¿No tienes cuenta?',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SignUpPage(),
+                          ));
+                    },
+                    child: Text(
+                      ' Regístrate',
+                      style: TextStyle(
+                        color: Colors.black,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
