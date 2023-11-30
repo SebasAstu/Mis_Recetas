@@ -22,103 +22,129 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Perfil',
+          'Mi Perfil',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.purple[200], // Color naranja llamativo
+        backgroundColor: Color(0xFFFFA53D),
+        elevation: 0,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CircleAvatar(
-              radius: 80,
-              backgroundColor: Colors.transparent, // Sin fondo de color
-              backgroundImage: AssetImage('tu_ruta_de_imagen'), // Agrega tu imagen de fondo aquí
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.purpleAccent, // Color del borde
-                    width: 6, // Ancho del borde
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFFFFA53D), Colors.white],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch, // Ocupa todo el ancho
+            children: <Widget>[
+              CircleAvatar(
+                radius: 80,
+                backgroundColor: Color(0xFFFFA53D),
+                backgroundImage: AssetImage('tu_ruta_de_imagen'),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 6,
+                    ),
+                  ),
+                  child: Icon(
+                    Icons.person,
+                    size: 60,
+                    color: Colors.white,
                   ),
                 ),
-                child: Icon(
-                  Icons.person,
-                  size: 60,
-                  color: Colors.purpleAccent, // Color del icono
+              ),
+              SizedBox(height: 20),
+
+              Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      buildProfileDetail('Nombre', name),
+                      buildProfileDetail('Edad', age.toString()),
+                      buildProfileDetail('Correo Electrónico', email),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 30), // Espacio entre la imagen y los datos
 
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20), // Ajusta el espacio a tu preferencia
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Nombre:',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.purpleAccent,
+              SizedBox(height: 20),
+
+              Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Biografía',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFFFA53D),
+                        ),
                       ),
-                    ),
-                    Text(
-                      '$name',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
+                      SizedBox(height: 10),
+                      Text(
+                        '$bio',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Edad:',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.purpleAccent,
-                      ),
-                    ),
-                    Text(
-                      '$age',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Correo Electrónico:',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.purpleAccent,
-                      ),
-                    ),
-                    Text(
-                      '$email',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-
-            SizedBox(height: 30), // Espacio entre los datos y otros elementos
-          ],
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget buildProfileDetail(String label, String value) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFFFFA53D),
+          ),
+        ),
+        SizedBox(height: 5),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.black,
+          ),
+        ),
+        SizedBox(height: 10),
+      ],
     );
   }
 }
