@@ -4,16 +4,41 @@ import 'package:http/http.dart' as http;
 import 'package:mis_recetas/RecipeDetails.dart';
 import 'package:mis_recetas/login.dart';
 import 'package:mis_recetas/login_cubit.dart';
+import 'package:mis_recetas/sign_up_cubit.dart';
+import 'package:mis_recetas/sign_up_page.dart';
 import 'dart:convert';
 import 'porfile.dart';
 
 void main() {
   runApp(
-    BlocProvider(
-      create: (context) => LoginCubit(),
-      child: loginP(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => LoginCubit()),
+        BlocProvider(create: (context) => SignUpCubit()),
+      ],
+      child: LoginApp(),
     ),
   );
+}
+
+class LoginApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/': (context) => LoginPage(),
+        '/home': (context) => HomePage(),
+        '/signup': (context) => SignUpPage(),
+      },
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          color: Colors.transparent,
+          elevation: 0,
+        ),
+      ),
+    );
+  }
 }
 
 class Recipe {

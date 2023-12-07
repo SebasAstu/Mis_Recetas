@@ -5,30 +5,6 @@ import './login_cubit.dart';
 import './login_state.dart';
 import './sign_up_page.dart';
 
-void main() {
-  runApp(
-    BlocProvider(
-      create: (context) => LoginCubit(),
-      child: loginP(),
-    ),
-  );
-}
-
-class loginP extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: LoginPage(),
-      theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          color: Colors.transparent,
-          elevation: 0,
-        ),
-      ),
-    );
-  }
-}
-
 class LoginPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -187,12 +163,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SignUpPage(),
-                      ),
-                    );
+                    Navigator.pushNamed(context, '/signup');
                   },
                   child: Text(
                     ' Regístrate',
