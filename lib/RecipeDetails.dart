@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:mis_recetas/main.dart';
 
@@ -22,7 +20,8 @@ class RecipeDetailPage extends StatelessWidget {
           children: [
             Image.network(
               recipe.imageUrl,
-              errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+              errorBuilder:
+                  (BuildContext context, Object error, StackTrace? stackTrace) {
                 return Image.asset('assets/imagen_reserva.jpg');
               },
             ),
@@ -37,7 +36,7 @@ class RecipeDetailPage extends StatelessWidget {
             Text('Puntuación: ${recipe.score.toStringAsFixed(2)}'),
             SizedBox(height: 8.0),
             Text('URL: ${recipe.url}'),
-            SizedBox(height: 16.0),            
+            SizedBox(height: 16.0),
           ],
         ),
       ),

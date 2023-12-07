@@ -1,6 +1,7 @@
-//Quiero una pantalla simple que tenga la opcion para registrarse con email y password, que se guarden en memoria y que se pueda acceder a la pantalla de inicio de sesion
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mis_recetas/sign_up_cubit.dart';
+import 'package:mis_recetas/sign_up_state.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -62,30 +63,76 @@ class _SignUpPageState extends State<SignUpPage> {
       appBar: AppBar(
         title: const Text("Sign up"),
         centerTitle: true,
+        backgroundColor: const Color(0xFFFFA53D),
       ),
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            children: <Widget>[
-              _buildTextField(
-                  _nameFilter, Icons.mail, 'Ingresa tu nombre completo'),
-              const SizedBox(height: 20.0),
-              _buildTextField(_emailFilter, Icons.mail, 'Correo Electrónico'),
-              const SizedBox(height: 20.0),
-              _buildTextField(_passwordFilter, Icons.lock, 'Contraseña',
-                  obscureText: true),
-              const SizedBox(height: 20.0),
-              _buildTextField(
-                  _repeatPasswordFilter, Icons.lock, 'Repetir Contraseña',
-                  obscureText: true),
-              const SizedBox(height: 20.0),
-              _buildButtons(),
-            ],
+      body: BlocBuilder<SignUpCubit, SignUpState>(builder: (context, state) {
+        if (state is SignUpLoading) {
+          return const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.check_circle,
+                  color: Colors.green,
+                  size: 50.0,
+                ),
+                SizedBox(height: 20.0),
+                Text("Exito"),
+                SizedBox(height: 20.0),
+              ],
+            ),
+          );
+        } else if (state is SignUpSuccess) {
+          Navigator.pop(context);
+        }
+        return Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                _buildTextField(
+                    _nameFilter, Icons.mail, 'Ingresa tu nombre completo'),
+                const SizedBox(height: 20.0),
+                _buildTextField(_emailFilter, Icons.mail, 'Correo Electrónico'),
+                const SizedBox(height: 20.0),
+                _buildTextField(_passwordFilter, Icons.lock, 'Contraseña',
+                    obscureText: true),
+                const SizedBox(height: 20.0),
+                _buildTextField(
+                    _repeatPasswordFilter, Icons.lock, 'Repetir Contraseña',
+                    obscureText: true),
+                const SizedBox(height: 20.0),
+                _buildButtons(),
+                const SizedBox(height: 20.0),
+                _buildMessage(),
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
+  }
+
+  Widget _buildMessage() {
+    return BlocBuilder<SignUpCubit, SignUpState>(builder: (context, state) {
+      if (state is SignUpFailure) {
+        var error = state.error;
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Icon(
+              Icons.close,
+              color: Colors.red,
+            ),
+            Text(
+              error.toString(), // Convert error to string and pass it to Text
+              style: const TextStyle(color: Colors.red),
+            ),
+          ],
+        );
+      }
+      return Container();
+    });
   }
 
   Widget _buildTextField(
@@ -152,5 +199,8 @@ class _SignUpPageState extends State<SignUpPage> {
   void _signUpPressed() {
     print(
         'The user wants to login with $_email and $_password and $_name and $_repeatPassword');
+    context
+        .read<SignUpCubit>()
+        .signUp(_email, _password, _name, _repeatPassword);
   }
 }

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
@@ -21,13 +22,17 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<bool> authenticateUser(String email, String password) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String registeredEmail = prefs.getString('email') ?? '';
+    String registeredPassword = prefs.getString('password') ?? '';
+
     // Lógica de autenticación aquí, por ejemplo:
     if (email == "pruebagg@gmail.com" && password == "123456") {
       return true; // Autenticación exitosa
     } else if (email == "pgg2@gmail.com" && password == "654321") {
       return true; // Autenticación exitosa
-    } else {
-      return false; // Autenticación fallida
     }
+
+    return email == registeredEmail && password == registeredPassword;
   }
 }
