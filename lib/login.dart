@@ -23,7 +23,10 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
       body: BlocBuilder<LoginCubit, LoginState>(
         builder: (context, state) {
           if (state is LoginInitialState) {

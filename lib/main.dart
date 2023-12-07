@@ -31,12 +31,6 @@ class LoginApp extends StatelessWidget {
         '/home': (context) => HomePage(),
         '/signup': (context) => SignUpPage(),
       },
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(
-          color: Colors.transparent,
-          elevation: 0,
-        ),
-      ),
     );
   }
 }

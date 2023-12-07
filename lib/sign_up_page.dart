@@ -63,6 +63,7 @@ class _SignUpPageState extends State<SignUpPage> {
       appBar: AppBar(
         title: const Text("Sign up"),
         centerTitle: true,
+        backgroundColor: const Color(0xFFFFA53D),
       ),
       body: BlocBuilder<SignUpCubit, SignUpState>(builder: (context, state) {
         if (state is SignUpLoading) {
@@ -115,16 +116,17 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _buildMessage() {
     return BlocBuilder<SignUpCubit, SignUpState>(builder: (context, state) {
       if (state is SignUpFailure) {
-        return const Row(
+        var error = state.error;
+        return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(
+            const Icon(
               Icons.close,
               color: Colors.red,
             ),
             Text(
-              "Error al registrarse",
-              style: TextStyle(color: Colors.red),
+              error.toString(), // Convert error to string and pass it to Text
+              style: const TextStyle(color: Colors.red),
             ),
           ],
         );
