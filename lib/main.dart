@@ -155,9 +155,26 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Recetas App'),
-        backgroundColor: Color(0xFFFFA53D),
+    title: Text(
+      'Recetas App',
+      style: TextStyle(fontWeight: FontWeight.bold),
+    ),
+    centerTitle: true,
+    backgroundColor: Color(0xFFFFA53D),
+    actions: [
+      IconButton(
+        icon: Icon(Icons.exit_to_app),
+        onPressed: () {
+          Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => LoginPage(),
+                                          ),
+                                        );
+        },
       ),
+    ],
+  ),
       body: Column(
         children: [
           isLoadingFeaturedRecipes
