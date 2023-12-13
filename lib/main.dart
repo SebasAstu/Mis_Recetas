@@ -151,7 +151,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -160,7 +160,6 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
-          
           isLoadingFeaturedRecipes
               ? Center(child: CircularProgressIndicator())
               : _buildFeaturedRecipesSection(),
@@ -177,38 +176,33 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Center( 
+                              Center(
                                 child: Image.network(
                                   recipes[index].imageUrl,
                                   errorBuilder:
                                       (BuildContext context, Object error,
                                           StackTrace? stackTrace) {
-                                    return Image.asset(
-                                        'assets/imagen_reserva.jpg');
+                                    return Image.asset('assets/imagen_reserva.jpg');
                                   },
                                 ),
                               ),
                               ListTile(
                                 title: Text(recipes[index].label),
-                                subtitle:
-                                    Text('Fuente: ${recipes[index].source}'),
+                                subtitle: Text('Fuente: ${recipes[index].source}'),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                        'Puntuación: ${recipes[index].score.toStringAsFixed(2)}'),
+                                    Text('Puntuación: ${recipes[index].score.toStringAsFixed(2)}'),
                                     ElevatedButton(
                                       onPressed: () {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                RecipeDetailPage(
-                                                    recipe: recipes[index]),
+                                                RecipeDetailPage(recipe: recipes[index]),
                                           ),
                                         );
                                       },
@@ -227,7 +221,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-         items: [
+        items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Inicio',
@@ -281,7 +275,7 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Recetas Destacadas',
+            'Recetas Recomendadas',
             style: TextStyle(
               fontSize: 24.0,
               fontWeight: FontWeight.bold,
@@ -331,6 +325,14 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               },
+            ),
+          ),
+          SizedBox(height: 16.0),
+          Text(
+            'Top Recetas',
+            style: TextStyle(
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],
