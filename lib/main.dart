@@ -272,9 +272,10 @@ class _HomePageState extends State<HomePage> {
                     username: 'usuario1',
                     name: 'Juan',
                     age: 25,
-                    address: 'Calle Principal, 123',
+                    genero: 'Hombre',
+                    location: 'Bolivia',
                     email: 'email',
-                    bio: 'bio',
+                    movil: '+519 765 43210',
                   ),
                 ),
               );
