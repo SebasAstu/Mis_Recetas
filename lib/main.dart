@@ -9,6 +9,7 @@ import 'login_cubit.dart';
 import 'sign_up_cubit.dart';
 import 'sign_up_page.dart';
 import 'porfile.dart';
+import 'mis_recetas.dart'; // Importar el nuevo archivo
 
 void main() {
   runApp(
@@ -42,6 +43,7 @@ class Recipe {
   final String source;
   final double score;
   final String url;
+  bool saved; // Nuevo campo para indicar si la receta está guardada
 
   Recipe({
     required this.label,
@@ -49,6 +51,7 @@ class Recipe {
     required this.source,
     required this.score,
     required this.url,
+    this.saved = false, // Inicialmente, la receta no está guardada
   });
 }
 
@@ -83,7 +86,8 @@ class _HomePageState extends State<HomePage> {
     try {
       final response = await http.get(
         Uri.parse(
-            'https://api.edamam.com/search?q=chicken&app_id=79acdb3b&app_key=6ec27f72236d11ef5c1820419c9ef05d&from=0&to=10&calories=591-722&health=alcohol-free'),
+          'https://api.edamam.com/search?q=chicken&app_id=79acdb3b&app_key=6ec27f72236d11ef5c1820419c9ef05d&from=0&to=10&calories=591-722&health=alcohol-free',
+        ),
       );
 
       print('API Response: ${response.body}');
@@ -100,6 +104,7 @@ class _HomePageState extends State<HomePage> {
               source: recipe['source'],
               score: recipe['yield'] * recipe['totalTime'],
               url: recipe['url'],
+              saved: false, // Inicialmente, la receta no está guardada
             );
           }).toList();
           isLoading = false;
@@ -119,7 +124,8 @@ class _HomePageState extends State<HomePage> {
     try {
       final response = await http.get(
         Uri.parse(
-            'https://api.edamam.com/search?q=featured&app_id=79acdb3b&app_key=6ec27f72236d11ef5c1820419c9ef05d&from=0&to=5'),
+          'https://api.edamam.com/search?q=featured&app_id=79acdb3b&app_key=6ec27f72236d11ef5c1820419c9ef05d&from=0&to=5',
+        ),
       );
 
       print('API Response (Featured Recipes): ${response.body}');
@@ -155,26 +161,29 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-    title: Text(
-      'Recetas App',
-      style: TextStyle(fontWeight: FontWeight.bold),
-    ),
-    centerTitle: true,
-    backgroundColor: Color(0xFFFFA53D),
-    actions: [
-      IconButton(
-        icon: Icon(Icons.exit_to_app),
-        onPressed: () {
-          Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => LoginPage(),
-                                          ),
-                                        );
-        },
+        title: Text(
+          'Recetas App',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: Color(0xFFFFA53D),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () {
+              // Dispatch an action to reset the authentication state
+              context.read<LoginCubit>().reset();
+
+              // Navigate to the login page and remove all previous routes
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+                (route) => false,
+              );
+            },
+          ),
+        ],
       ),
-    ],
-  ),
       body: Column(
         children: [
           isLoadingFeaturedRecipes
@@ -193,12 +202,11 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              // Contenedor para la imagen
                               Center(
                                 child: Image.network(
                                   recipes[index].imageUrl,
-                                  errorBuilder:
-                                      (BuildContext context, Object error,
-                                          StackTrace? stackTrace) {
+                                  errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
                                     return Image.asset('assets/imagen_reserva.jpg');
                                   },
                                 ),
@@ -210,20 +218,41 @@ class _HomePageState extends State<HomePage> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // Alinea los elementos al principio y al final del Row
                                   children: [
-                                    Text('Puntuación: ${recipes[index].score.toStringAsFixed(2)}'),
+                                    // Icono de guardar a la izquierda
+                                    IconButton(
+                                      icon: Icon(
+                                        recipes[index].saved ? Icons.favorite : Icons.favorite_border,
+                                        color: recipes[index].saved ? Color(0xFFFFA53D) : Color(0xFFFFA53D),
+                                      ),
+                                      onPressed: () {
+                                        // Cambia el estado de guardado al hacer clic en el icono
+                                        setState(() {
+                                          recipes[index].saved = !recipes[index].saved;
+                                        });
+                                      },
+                                    ),
+                                    // Botón "Ver Más" a la derecha
                                     ElevatedButton(
                                       onPressed: () {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                RecipeDetailPage(recipe: recipes[index]),
+                                            builder: (context) => RecipeDetailPage(recipe: recipes[index]),
                                           ),
                                         );
                                       },
-                                      child: Text('Ver Más'),
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.transparent, // Hace que el botón sea transparente
+                                        shadowColor: Colors.transparent, // Elimina la sombra del botón
+                                      ),
+                                      child: Text(
+                                        'Ver Más',
+                                        style: TextStyle(
+                                          color: isLoading ? Colors.transparent : Color(0xFFFFA53D),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -262,6 +291,14 @@ class _HomePageState extends State<HomePage> {
               break;
             case 1:
               print('Presionado Buscar');
+              // Filtrar recetas guardadas y mostrar solo aquellas con el estado saved en true
+              List<Recipe> savedRecipes = recipes.where((recipe) => recipe.saved).toList();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MisRecetasPage(recipes: savedRecipes),
+                ),
+              );
               break;
             case 2:
               print('Presionado Perfil');
