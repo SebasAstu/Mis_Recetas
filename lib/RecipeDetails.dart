@@ -29,10 +29,30 @@ class RecipeDetailPage extends StatelessWidget {
             Text(
               'Label: ${recipe.label}',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-            ),            
+            ),
             SizedBox(height: 8.0),
             Text('Puntuación: ${recipe.score.toStringAsFixed(2)}'),
+            SizedBox(height: 16.0),
+            Text(
+              'Detalles Nutricionales:',
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            ),
             SizedBox(height: 8.0),
+            Text('Calorías: ${recipe.calories.toStringAsFixed(2)}'),
+            SizedBox(height: 8.0),
+            Text('Etiquetas de Salud: ${recipe.healthLabels.join(', ')}'),
+            SizedBox(height: 8.0),
+            Text('Ingredientes:'),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: recipe.ingredients
+                  .map((ingredient) => Text('- $ingredient'))
+                  .toList(),
+            ),
+            SizedBox(height: 16.0),
+            Text('Etiquetas de Dieta: ${recipe.dietLabels.join(', ')}'),
+            SizedBox(height: 8.0),
+            Text('Tipo de Cocina: ${recipe.cuisineType.join(', ')}'),
           ],
         ),
       ),

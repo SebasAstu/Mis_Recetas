@@ -44,6 +44,11 @@ class Recipe {
   final double score;
   final String url;
   bool saved; // Nuevo campo para indicar si la receta está guardada
+  final List<String> healthLabels;
+  final List<String> ingredients;
+  final double calories;
+  final List<String> dietLabels;
+  final List<String> cuisineType;
 
   Recipe({
     required this.label,
@@ -52,6 +57,11 @@ class Recipe {
     required this.score,
     required this.url,
     this.saved = false, // Inicialmente, la receta no está guardada
+    required this.healthLabels,
+    required this.ingredients,
+    required this.calories,
+    required this.dietLabels,
+    required this.cuisineType,
   });
 }
 
@@ -98,6 +108,9 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           recipes = (data['hits'] as List).map((hit) {
             final recipe = hit['recipe'];
+            final healthLabels = List<String>.from(recipe['healthLabels']);
+            final ingredients = List<String>.from(recipe['ingredientLines']);
+
             return Recipe(
               label: recipe['label'],
               imageUrl: recipe['image'],
@@ -105,6 +118,11 @@ class _HomePageState extends State<HomePage> {
               score: recipe['yield'] * recipe['totalTime'],
               url: recipe['url'],
               saved: false, // Inicialmente, la receta no está guardada
+              healthLabels: healthLabels,
+              ingredients: ingredients,
+              calories: recipe['calories'].toDouble(),
+              dietLabels: List<String>.from(recipe['dietLabels']),
+              cuisineType: List<String>.from(recipe['cuisineType']),
             );
           }).toList();
           isLoading = false;
@@ -136,15 +154,22 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           featuredRecipes = (data['hits'] as List).map((hit) {
             final recipe = hit['recipe'];
+            final healthLabels = List<String>.from(recipe['healthLabels']);
+            final ingredients = List<String>.from(recipe['ingredientLines']);
+
             return Recipe(
               label: recipe['label'],
               imageUrl: recipe['image'],
               source: recipe['source'],
               score: recipe['yield'] * recipe['totalTime'],
               url: recipe['url'],
+              healthLabels: healthLabels,
+              ingredients: ingredients,
+              calories: recipe['calories'].toDouble(),
+              dietLabels: List<String>.from(recipe['dietLabels']),
+              cuisineType: List<String>.from(recipe['cuisineType']),
             );
           }).toList();
-          isLoadingFeaturedRecipes = false;
         });
       } else {
         throw Exception('Failed to load featured recipes');
@@ -206,30 +231,39 @@ class _HomePageState extends State<HomePage> {
                               Center(
                                 child: Image.network(
                                   recipes[index].imageUrl,
-                                  errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                                    return Image.asset('assets/imagen_reserva.jpg');
+                                  errorBuilder: (BuildContext context,
+                                      Object error, StackTrace? stackTrace) {
+                                    return Image.asset(
+                                        'assets/imagen_reserva.jpg');
                                   },
                                 ),
                               ),
                               ListTile(
                                 title: Text(recipes[index].label),
-                                subtitle: Text('Fuente: ${recipes[index].source}'),
+                                subtitle:
+                                    Text('Fuente: ${recipes[index].source}'),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // Alinea los elementos al principio y al final del Row
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween, // Alinea los elementos al principio y al final del Row
                                   children: [
                                     // Icono de guardar a la izquierda
                                     IconButton(
                                       icon: Icon(
-                                        recipes[index].saved ? Icons.favorite : Icons.favorite_border,
-                                        color: recipes[index].saved ? Color(0xFFFFA53D) : Color(0xFFFFA53D),
+                                        recipes[index].saved
+                                            ? Icons.favorite
+                                            : Icons.favorite_border,
+                                        color: recipes[index].saved
+                                            ? Color(0xFFFFA53D)
+                                            : Color(0xFFFFA53D),
                                       ),
                                       onPressed: () {
                                         // Cambia el estado de guardado al hacer clic en el icono
                                         setState(() {
-                                          recipes[index].saved = !recipes[index].saved;
+                                          recipes[index].saved =
+                                              !recipes[index].saved;
                                         });
                                       },
                                     ),
@@ -239,18 +273,24 @@ class _HomePageState extends State<HomePage> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => RecipeDetailPage(recipe: recipes[index]),
+                                            builder: (context) =>
+                                                RecipeDetailPage(
+                                                    recipe: recipes[index]),
                                           ),
                                         );
                                       },
                                       style: ElevatedButton.styleFrom(
-                                        primary: Colors.transparent, // Hace que el botón sea transparente
-                                        shadowColor: Colors.transparent, // Elimina la sombra del botón
+                                        primary: Colors
+                                            .transparent, // Hace que el botón sea transparente
+                                        shadowColor: Colors
+                                            .transparent, // Elimina la sombra del botón
                                       ),
                                       child: Text(
                                         'Ver Más',
                                         style: TextStyle(
-                                          color: isLoading ? Colors.transparent : Color(0xFFFFA53D),
+                                          color: isLoading
+                                              ? Colors.transparent
+                                              : Color(0xFFFFA53D),
                                         ),
                                       ),
                                     ),
@@ -292,7 +332,8 @@ class _HomePageState extends State<HomePage> {
             case 1:
               print('Presionado Buscar');
               // Filtrar recetas guardadas y mostrar solo aquellas con el estado saved en true
-              List<Recipe> savedRecipes = recipes.where((recipe) => recipe.saved).toList();
+              List<Recipe> savedRecipes =
+                  recipes.where((recipe) => recipe.saved).toList();
               Navigator.push(
                 context,
                 MaterialPageRoute(
