@@ -13,8 +13,6 @@ class LoginPage extends StatelessWidget {
     // Lógica de autenticación aquí, por ejemplo:
     if (email == "pruebagg@gmail.com" && password == "123456") {
       return true; // Autenticación exitosa
-    } else if (email == "pgg2@gmail.com" && password == "654321") {
-      return true; // Autenticación exitosa
     } else {
       return false; // Autenticación fallida
     }
@@ -34,9 +32,18 @@ class LoginPage extends StatelessWidget {
           } else if (state is LoginLoadingState) {
             return buildLoadingUI();
           } else if (state is LoginSuccessState) {
-            return buildSuccessUI(context);
+            // En caso de éxito, navegar a la página deseada directamente
+            Future.delayed(Duration(microseconds: 5), () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ),
+              );
+            });
+            return Container(); // No mostrar nada aquí
           } else if (state is LoginFailureState) {
-            return buildFailureUI(context);
+            return buildInitialUI(context, errorMessage: state.errorMessage);
           } else {
             return Container();
           }
@@ -45,7 +52,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget buildInitialUI(BuildContext context) {
+  Widget buildInitialUI(BuildContext context, {String? errorMessage}) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -74,12 +81,15 @@ class LoginPage extends StatelessWidget {
                   icon: Icon(Icons.mail, color: Color(0xFFFFA53D)),
                   hintText: 'Correo Electrónico',
                   border: InputBorder.none,
+                  errorText: errorMessage != null && errorMessage.isNotEmpty
+                      ? errorMessage
+                      : null,
                 ),
                 style: TextStyle(color: Color(0xFFFFA53D)),
               ),
             ),
           ),
-          SizedBox(height: 20.0),
+          SizedBox(height: 10.0),
           Container(
             width: 250.0,
             height: 46.0,
@@ -99,6 +109,9 @@ class LoginPage extends StatelessWidget {
                   icon: Icon(Icons.lock, color: Color(0xFFFFA53D)),
                   hintText: 'Contraseña',
                   border: InputBorder.none,
+                  errorText: errorMessage != null && errorMessage.isNotEmpty
+                      ? errorMessage
+                      : null,
                 ),
                 style: TextStyle(color: Color(0xFFFFA53D)),
               ),
@@ -107,10 +120,23 @@ class LoginPage extends StatelessWidget {
           SizedBox(height: 20.0),
           ElevatedButton(
             onPressed: () async {
-              context.read<LoginCubit>().login(
-                    _emailController.text,
-                    _passwordController.text,
-                  );
+              String email = _emailController.text.trim();
+              String password = _passwordController.text.trim();
+
+              if (email.isEmpty || password.isEmpty) {
+                showSnackBar(context, 'Por favor, completa todos los campos.');
+                return;
+              }
+
+              bool isAuthenticated = await authenticateUser(email, password);
+
+              if (isAuthenticated) {
+                // Autenticación exitosa
+                context.read<LoginCubit>().login(email, password);
+              } else {
+                // Autenticación fallida
+                showSnackBar(context, 'Correo electrónico o contraseña incorrectos.');
+              }
             },
             style: ElevatedButton.styleFrom(
               primary: Color(0xFFFFA53D),
@@ -197,67 +223,14 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget buildSuccessUI(BuildContext context) {
-    Future.delayed(Duration(microseconds: 5), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomePage(),
-        ),
-      );
-    });
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(
-            Icons.check_circle,
-            color: Colors.green,
-            size: 50.0,
-          ),
-          SizedBox(height: 20.0),
-          Text("Exito"),
-          SizedBox(height: 20.0),
-        ],
-      ),
-    );
-  }
-
-  Widget buildFailureUI(BuildContext context) {
-    Future.microtask(() {
-      Future.delayed(Duration(microseconds: 20), () {
-        // Este código se ejecuta después de 2 segundos
-        context.read<LoginCubit>().reset(); // Reiniciar el estado del cubit
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => LoginPage(),
-          ),
-        );
-      });
-    });
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(
-            Icons.error,
-            color: Colors.red,
-            size: 50.0,
-          ),
-          SizedBox(height: 20.0),
-          Text("Fallido"),
-        ],
-      ),
-    );
-  }
-
   void showSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
+        content: Text(
+          message,
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Color(0xFFFFA53D), // Color naranja
       ),
     );
   }

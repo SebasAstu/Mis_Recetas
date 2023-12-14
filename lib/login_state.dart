@@ -8,4 +8,6 @@ class LoginLoadingState extends LoginState {}
 
 class LoginSuccessState extends LoginState {}
 
-class LoginFailureState extends LoginState {}
+class LoginFailureState extends LoginState {
+  get errorMessage => null;
+}
